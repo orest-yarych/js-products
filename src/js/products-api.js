@@ -19,3 +19,13 @@ export async function getProductsByCategory(category) {
   );
   return data;
 }
+
+export async function getProductById(id) {
+  const { data } = await axios(`${API_ENDPOINTS.PRODUCT_BY_ID}${id}`);
+  return data;
+}
+
+export async function searchProducts(query) {
+  const { data } = await axios(`${API_ENDPOINTS.SEARCH}?q=${query}`);
+  return data;
+}
