@@ -1,4 +1,5 @@
 import { refs } from './refs';
+import { isInCart, isInWishlist } from './storage';
 
 export function renderCategories(categories) {
   const categoriesAll = ['All', ...categories];
@@ -51,6 +52,7 @@ export function hideNotFound() {
 }
 
 export function renderProductInModal({
+  id,
   images,
   title,
   description,
@@ -69,4 +71,46 @@ export function renderProductInModal({
 <p class="modal-product__price">Price: ${price}$</p>
 <button class="modal-product__buy-btn" type="button">Buy</button> </div>`;
   refs.modalProduct.innerHTML = markup;
+  updateModalButtons(id);
+}
+
+export function updateModalButtons(id) {
+  if (isInWishlist(id)) {
+    refs.addToWishListBtn.textContent = 'Remove from Wishlist';
+  } else {
+    refs.addToWishListBtn.textContent = 'Add to Wishlist';
+  }
+  if (isInCart(id)) {
+    refs.addToCartBtn.textContent = 'Remove from Cart';
+  } else {
+    refs.addToCartBtn.textContent = 'Add to Cart';
+  }
+}
+
+export function updateCounters(wishlistItems, cartItems) {
+  refs.whishlistCount.textContent = wishlistItems.length;
+  refs.cartCount.textContent = cartItems.length;
+}
+
+export function showLoadMoreButton() {
+  refs.loadMoreBtn.classList.remove('is-hidden');
+}
+
+export function hideLoadMoreButton() {
+  refs.loadMoreBtn.classList.add('is-hidden');
+  refs.loadMoreBtn.classList.remove('is-loading');
+}
+
+export function showLoadMoreButtonLoading() {
+  refs.loadMoreBtn.classList.add('is-loading');
+}
+
+export function hideLoadMoreButtonLoading() {
+  refs.loadMoreBtn.classList.remove('is-loading');
+}
+
+export function updateCartSummary(products) {
+  refs.cartSummaryValue.textContent = products.length;
+  const totalPrice = products.reduce((acc, product) => acc + product.price, 0);
+  refs.cartPrice.textContent = totalPrice.toFixed(2) + '$';
 }
